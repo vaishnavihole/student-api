@@ -36,6 +36,57 @@ app.post('/create-student', async(req, res)=>{
   })
 })
 
+app.get('/all-students', async(req, res)=>{
+  const students = await Student.find();
+  res.send({
+    success: true,
+    data: students
+  })
+})
+
+app.post('/find-by-roll', async(req, res)=>{
+  const {roll} = req.body;
+
+  const student = await Student.findOne({
+    roll: roll
+  });
+
+  res.json({
+    success: true,
+    data: student
+  })
+})
+
+app.post('/update-student', async(req, res)=>{
+  const {roll, fullName, mobile} = req.body;
+
+  const result = await Student.updateOne(
+    {
+      roll: roll
+    },
+    {
+      fullName: fullName,
+      mobile: mobile
+    })
+
+  res.send({
+    success: true,
+    message: "Student updated successfully"
+  })
+})
+
+app.post('/delete-student', async (req, res)=>{
+  const {roll} = req.body;
+  const result = await Student.deleteOne({
+    roll: roll
+  })
+
+  res.send({
+    success: true,
+    message: "User deleted successfully"
+  })
+})
+
 app.listen(5000, ()=>{
   console.log('Server started running on PORT 5000')
 })
